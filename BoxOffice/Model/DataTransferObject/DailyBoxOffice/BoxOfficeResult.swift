@@ -5,7 +5,7 @@
 //  Created by Idinaloq, MARY on 2023/07/24.
 //
 
-struct BoxOfficeResult: Decodable {
+struct BoxOfficeResult: Decodable, Hashable {
     let boxOfficeType: String
     let showRange: String
     let dailyBoxOfficeList: [DailyBoxOffice]

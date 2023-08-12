@@ -38,6 +38,7 @@ final class DailyBoxOfficeViewController: UIViewController {
         configureView()
         setUpAutoLayout()
         receiveData()
+        configureDataSource()
     }
     
     private func configureNavigationItem() {
@@ -45,11 +46,12 @@ final class DailyBoxOfficeViewController: UIViewController {
     }
     
     private func setupCollectionView() {
-        collectionView.dataSource = self
+//        collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(DailyBoxOfficeCollectionViewCell.self,
                                 forCellWithReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier)
         collectionView.refreshControl = refreshControl
+        
     }
     
     private func configureView() {
@@ -111,35 +113,47 @@ final class DailyBoxOfficeViewController: UIViewController {
     private func reloadCollectionView() {
         DispatchQueue.main.async { [weak self] in
             self?.loadingView.hide()
-            self?.collectionView.reloadData()
+//            self?.collectionView.reloadData()
             self?.refreshControl.endRefreshing()
+            self?.applyInitialSnapshot()
         }
     }
     
     @objc private func refreshData() {
         receiveData()
     }
-}
-
-extension DailyBoxOfficeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+    
+    private var dataSource: UICollectionViewDiffableDataSource<Int, DailyBoxOffice>!
+        
+        private func configureDataSource() {
+            dataSource = UICollectionViewDiffableDataSource<Int, DailyBoxOffice>(collectionView: collectionView) {
+                (collectionView: UICollectionView, indexPath: IndexPath, data: DailyBoxOffice) -> UICollectionViewCell? in
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier, for: indexPath) as? DailyBoxOfficeCollectionViewCell else {
+                    return UICollectionViewCell()
+                }
+                
+                cell.configureCell(data: data)
+                
+                return cell
+            }
+        }
+        
+        private func applyInitialSnapshot() {
+            var snapshot = NSDiffableDataSourceSnapshot<Int, DailyBoxOffice>()
+            snapshot.appendSections([1])
+            guard let data = boxOfficeData?.boxOfficeResult.dailyBoxOfficeList else { return }
+            
+            snapshot.appendItems(data)
+            dataSource.apply(snapshot, animatingDifferences: false)
+        }
+        
+        
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier, for: indexPath) as? DailyBoxOfficeCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        guard let data = boxOfficeData,
-              let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
-            return cell
-        }
-        
-        cell.configureCell(data: data)
-        
-        return cell
-    }
+
+
+extension DailyBoxOfficeViewController: UICollectionViewDelegateFlowLayout {
+
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat = collectionView.frame.width

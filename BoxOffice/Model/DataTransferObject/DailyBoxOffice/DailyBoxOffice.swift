@@ -5,7 +5,7 @@
 //  Created by Idinaloq, MARY on 2023/07/24.
 //
 
-struct DailyBoxOffice: Decodable {
+struct DailyBoxOffice: Decodable, Hashable {
     let rowNumber: String
     let rank: String
     let rankChangeValue: String

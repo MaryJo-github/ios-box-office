@@ -116,13 +116,13 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
         ])
     }
     
-    func configureCell(data: DailyBoxOffice) {
-        let movieName: String = data.movieName
-        let rank: String = data.rank
-        let audienceCount: String = data.audienceCount
-        let audienceAccumulate: String = data.audienceAccumulate
-        let rankChangeValue: String = data.rankChangeValue
-        let rankOldAndNew: OldAndNew? = OldAndNew(rawValue: data.rankOldAndNew)
+    func configureCell(data: BoxOfficeEntity) {
+        let movieName: String = data.dailyBoxOffice.movieName
+        let rank: String = data.dailyBoxOffice.rank
+        let audienceCount: String = data.dailyBoxOffice.audienceCount
+        let audienceAccumulate: String = data.dailyBoxOffice.audienceAccumulate
+        let rankChangeValue: String = data.dailyBoxOffice.rankChangeValue
+        let rankOldAndNew: OldAndNew? = OldAndNew(rawValue: data.dailyBoxOffice.rankOldAndNew)
         
         self.titleLabel.text = movieName
         self.rankLabel.text = rank

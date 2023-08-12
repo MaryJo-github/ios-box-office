@@ -7,12 +7,76 @@
 
 import UIKit
 
+struct BoxOfficeEntity: Hashable {
+    let dailyBoxOffice: DailyBoxOffice
+    let identifier = UUID()
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
+    
+    static func == (lhs: BoxOfficeEntity, rhs: BoxOfficeEntity) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
+}
+
+enum Section: CaseIterable {
+    case main
+}
+
 final class DailyBoxOfficeViewController: UIViewController {
     private var kobisOpenAPI: KobisOpenAPI = KobisOpenAPI()
     private var networkService: NetworkService = NetworkService()
     private var dateManager: DateManager = DateManager()
     private var boxOfficeData: BoxOffice?
     private let loadingView: LoadingView = LoadingView()
+    var dataSource: UICollectionViewDiffableDataSource<Section, BoxOfficeEntity>!
+    
+    func configureDataSource() {
+        let cellRegistration = UICollectionView.CellRegistration<DailyBoxOfficeCollectionViewCell, BoxOfficeEntity> { (cell, indexPath, boxOffice) in
+//            print("indexPath \(indexPath.item)")
+//            guard let data = boxOffice.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else { return }
+//            cell.configureCell(data: data)
+        }
+                
+        dataSource = UICollectionViewDiffableDataSource<Section, BoxOfficeEntity>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, identifier: BoxOfficeEntity) -> UICollectionViewCell? in
+            print("indexPath \(indexPath.item)")
+            let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
+            cell.configureCell(data: identifier)
+            return cell
+        }
+                
+    }
+    
+    func performQuery() {
+        guard let boxOffice = boxOfficeData else { return }
+        
+        let data = boxOffice.boxOfficeResult.dailyBoxOfficeList.map { BoxOfficeEntity(dailyBoxOffice: DailyBoxOffice(rowNumber: $0.rowNumber,
+                                                                                                                     rank: $0.rank,
+                                                                                                                     rankChangeValue: $0.rankChangeValue,
+                                                                                                                     rankOldAndNew: $0.rankOldAndNew,
+                                                                                                                     movieCode: $0.movieCode,
+                                                                                                                     movieName: $0.movieName,
+                                                                                                                     openDate: $0.openDate,
+                                                                                                                     salesAmount: $0.salesAmount,
+                                                                                                                     salesShare: $0.salesShare,
+                                                                                                                     salesChangeValue: $0.salesChangeValue,
+                                                                                                                     salesChangeRatio: $0.salesChangeRatio,
+                                                                                                                     salesAccumulate: $0.salesAccumulate,
+                                                                                                                     audienceCount: $0.audienceCount,
+                                                                                                                     audienceChangeValue: $0.audienceChangeValue,
+                                                                                                                     audienceChangeRatio: $0.audienceChangeRatio,
+                                                                                                                     audienceAccumulate: $0.audienceAccumulate,
+                                                                                                                     screenCount: $0.screenCount,
+                                                                                                                     showCount: $0.showCount)) }
+    
+        var snapshot = NSDiffableDataSourceSnapshot<Section, BoxOfficeEntity>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(data)
+        
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
     
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl: UIRefreshControl = UIRefreshControl()
@@ -37,6 +101,7 @@ final class DailyBoxOfficeViewController: UIViewController {
         setupCollectionView()
         configureView()
         setUpAutoLayout()
+        configureDataSource()
         receiveData()
     }
     
@@ -45,7 +110,7 @@ final class DailyBoxOfficeViewController: UIViewController {
     }
     
     private func setupCollectionView() {
-        collectionView.dataSource = self
+//        collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(DailyBoxOfficeCollectionViewCell.self,
                                 forCellWithReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier)
@@ -111,7 +176,8 @@ final class DailyBoxOfficeViewController: UIViewController {
     private func reloadCollectionView() {
         DispatchQueue.main.async { [weak self] in
             self?.loadingView.hide()
-            self?.collectionView.reloadData()
+//            self?.collectionView.reloadData()
+            self?.performQuery()
             self?.refreshControl.endRefreshing()
         }
     }
@@ -121,26 +187,7 @@ final class DailyBoxOfficeViewController: UIViewController {
     }
 }
 
-extension DailyBoxOfficeViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier, for: indexPath) as? DailyBoxOfficeCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        guard let data = boxOfficeData,
-              let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
-            return cell
-        }
-        
-        cell.configureCell(data: data)
-        
-        return cell
-    }
-    
+extension DailyBoxOfficeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat = collectionView.frame.width
         var height: CGFloat = collectionView.frame.height * 0.1

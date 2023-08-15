@@ -8,5 +8,6 @@
 import UIKit
 
 extension UICollectionViewCell {
-    static let identifier: String = String(describing: type(of: UICollectionViewCell.self))
+//    static let identifier: String = String(describing: type(of: UICollectionViewCell.self))
+//    static let identifier: String = String(describing: UICollectionViewCell.self)
 }

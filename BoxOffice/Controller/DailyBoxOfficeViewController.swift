@@ -13,6 +13,25 @@ final class DailyBoxOfficeViewController: UIViewController {
     private var boxOfficeData: BoxOffice?
     private let loadingView: LoadingView = LoadingView()
     private var targetDate: Date = DateManager.fetchPastDate(dayAgo: 1)
+    private var isListMode: Bool = true {
+        didSet {
+            changeMode()
+            collectionView.reloadData()
+        }
+    }
+    
+    private func changeMode() {
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        
+        if isListMode {
+            layout?.minimumLineSpacing = 0
+            layout?.minimumInteritemSpacing = 0
+        } else {
+            layout?.minimumLineSpacing = 8
+            layout?.minimumInteritemSpacing = 8
+        }
+        
+    }
     
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl: UIRefreshControl = UIRefreshControl()
@@ -24,7 +43,7 @@ final class DailyBoxOfficeViewController: UIViewController {
     private let collectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        layout.minimumLineSpacing = 0
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         return collectionView
@@ -51,9 +70,12 @@ final class DailyBoxOfficeViewController: UIViewController {
     }
     
     @objc func presentCalendarView() {
-        let calendarViewController = CalendarViewController(date: targetDate)
-        calendarViewController.delegate = self
-        present(calendarViewController, animated: true)
+//        let calendarViewController = CalendarViewController(date: targetDate)
+//        calendarViewController.delegate = self
+//        present(calendarViewController, animated: true)
+//
+        
+        isListMode = !isListMode
     }
     
     private func setupCollectionView() {
@@ -61,6 +83,8 @@ final class DailyBoxOfficeViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(DailyBoxOfficeCollectionViewCell.self,
                                 forCellWithReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier)
+        collectionView.register(DailyBoxOfficeCollectionViewCellGrid.self,
+                                forCellWithReuseIdentifier: DailyBoxOfficeCollectionViewCellGrid.identifier)
         collectionView.refreshControl = refreshControl
     }
     
@@ -148,39 +172,76 @@ extension DailyBoxOfficeViewController: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier, for: indexPath) as? DailyBoxOfficeCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        guard let data = boxOfficeData,
-              let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
+        if isListMode {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier, for: indexPath) as? DailyBoxOfficeCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            guard let data = boxOfficeData,
+                  let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
+                return cell
+            }
+            
+            cell.configureCell(data: data)
+            
+            return cell
+            
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyBoxOfficeCollectionViewCellGrid.identifier, for: indexPath) as? DailyBoxOfficeCollectionViewCellGrid else {
+                return UICollectionViewCell()
+            }
+            
+            guard let data = boxOfficeData,
+                  let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
+                return cell
+            }
+            
+            cell.configureCell(data: data)
+            
             return cell
         }
-        
-        cell.configureCell(data: data)
-        
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = collectionView.frame.width
-        var height: CGFloat = collectionView.frame.height * 0.1
-        
-        guard let data = boxOfficeData,
-              let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
+        if isListMode {
+            let width: CGFloat = collectionView.frame.width
+            var height: CGFloat = collectionView.frame.height * 0.1
+            
+            guard let data = boxOfficeData,
+                  let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
+                return CGSize(width: width, height: height)
+            }
+            
+            let cell = DailyBoxOfficeCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: height))
+            
+            cell.titleLabel.text = data.movieName
+            cell.layoutIfNeeded()
+            
+            let titleLabelSize = cell.titleLabel.intrinsicContentSize
+            
+            height += titleLabelSize.height
+            
+            return CGSize(width: width, height: height)
+        } else {
+            let width: CGFloat = collectionView.frame.width / 2.2
+            var height = width
+            
+            guard let data = boxOfficeData,
+                  let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
+                return CGSize(width: width, height: height)
+            }
+            
+            let cell = DailyBoxOfficeCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: height))
+            
+            cell.titleLabel.text = data.movieName
+            cell.layoutIfNeeded()
+            
+            let titleLabelSize = cell.titleLabel.intrinsicContentSize
+            
+            height += titleLabelSize.height
+            
             return CGSize(width: width, height: height)
         }
-        
-        let cell = DailyBoxOfficeCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: height))
-        
-        cell.titleLabel.text = data.movieName
-        cell.layoutIfNeeded()
-        
-        let titleLabelSize = cell.titleLabel.intrinsicContentSize
-        
-        height += titleLabelSize.height
-        
-        return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -1,14 +1,14 @@
 //
-//  DailyBoxOfficeCollectionViewCell.swift
+//  DailyBoxOfficeCollectionViewCellGrid.swift
 //  BoxOffice
 //
-//  Created by Idinaloq, MARY on 2023/08/03.
+//  Created by MARY on 2023/08/15.
 //
 
 import UIKit
 
-final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
-    static let identifier: String = String(describing: DailyBoxOfficeCollectionViewCell.self)
+class DailyBoxOfficeCollectionViewCellGrid: UICollectionViewCell {
+    static let identifier: String = String(describing: DailyBoxOfficeCollectionViewCellGrid.self)
     
     let titleLabel: UILabel = {
         let label: UILabel = UILabel()
@@ -45,15 +45,6 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
         return label
     }()
     
-    private let rankStackView: UIStackView = {
-        let stackView: UIStackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.distribution = .fillProportionally
-        
-        return stackView
-    }()
-    
     private let movieStackView: UIStackView = {
         let stackView: UIStackView = UIStackView()
         stackView.axis = .vertical
@@ -65,7 +56,7 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
     
     private let dailyBoxOfficeStackView: UIStackView = {
         let stackView: UIStackView = UIStackView()
-        stackView.axis = .horizontal
+        stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         return stackView
@@ -93,27 +84,22 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
     }
     
     private func configureUI() {
-        rankStackView.addArrangedSubview(rankLabel)
-        rankStackView.addArrangedSubview(rankChangeValueLabel)
-        
+        movieStackView.addArrangedSubview(rankLabel)
         movieStackView.addArrangedSubview(titleLabel)
-        movieStackView.addArrangedSubview(visitorLabel)
-        
-        dailyBoxOfficeStackView.addArrangedSubview(rankStackView)
+        movieStackView.addArrangedSubview(rankChangeValueLabel)
+                
         dailyBoxOfficeStackView.addArrangedSubview(movieStackView)
+        dailyBoxOfficeStackView.addArrangedSubview(visitorLabel)
         
         contentView.addSubview(dailyBoxOfficeStackView)
-        self.layer.addSeparator(x: 0, y: 0, width: frame.width, height: 0.5)
-        self.accessories = [.disclosureIndicator()]
+//        self.layer.addSeparator(x: 0, y: 0, width: frame.width, height: 0.5)
     }
     
     private func setUpAutolayout() {
         NSLayoutConstraint.activate([
-            rankStackView.widthAnchor.constraint(equalTo: dailyBoxOfficeStackView.widthAnchor, multiplier: 0.2),
-            
             dailyBoxOfficeStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            dailyBoxOfficeStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            dailyBoxOfficeStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            dailyBoxOfficeStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            dailyBoxOfficeStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             dailyBoxOfficeStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
         ])
     }

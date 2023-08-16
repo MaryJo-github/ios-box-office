@@ -13,16 +13,25 @@ class DailyBoxOfficeCollectionViewCellGrid: UICollectionViewCell {
     let titleLabel: UILabel = {
         let label: UILabel = UILabel()
         label.font = .preferredFont(forTextStyle: .title2)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        label.setContentHuggingPriority(.init(200), for: .vertical)
+        label.minimumContentSizeCategory = .extraSmall
+        label.maximumContentSizeCategory = .extraExtraLarge
         
         return label
     }()
     
     private let visitorLabel: UILabel = {
         let label: UILabel = UILabel()
-        label.font = .preferredFont(forTextStyle: .title3)
+        label.font = .preferredFont(forTextStyle: .body)
+        label.minimumScaleFactor = 0.1
+        label.adjustsFontSizeToFitWidth = true
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
         
         return label
     }()
@@ -31,7 +40,10 @@ class DailyBoxOfficeCollectionViewCellGrid: UICollectionViewCell {
         let label: UILabel = UILabel()
         label.font = .preferredFont(forTextStyle: .title1)
         label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.minimumContentSizeCategory = .extraSmall
+        label.maximumContentSizeCategory = .extraLarge
         
         return label
     }()
@@ -40,24 +52,20 @@ class DailyBoxOfficeCollectionViewCellGrid: UICollectionViewCell {
         let label: UILabel = UILabel()
         label.font = .preferredFont(forTextStyle: .title3)
         label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.minimumContentSizeCategory = .extraSmall
+        label.maximumContentSizeCategory = .extraLarge
         
         return label
-    }()
-    
-    private let movieStackView: UIStackView = {
-        let stackView: UIStackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.distribution = .fillProportionally
-        
-        return stackView
     }()
     
     private let dailyBoxOfficeStackView: UIStackView = {
         let stackView: UIStackView = UIStackView()
         stackView.axis = .vertical
+        stackView.distribution = .fill
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.spacing = 4
         
         return stackView
     }()
@@ -84,23 +92,22 @@ class DailyBoxOfficeCollectionViewCellGrid: UICollectionViewCell {
     }
     
     private func configureUI() {
-        movieStackView.addArrangedSubview(rankLabel)
-        movieStackView.addArrangedSubview(titleLabel)
-        movieStackView.addArrangedSubview(rankChangeValueLabel)
-                
-        dailyBoxOfficeStackView.addArrangedSubview(movieStackView)
+        dailyBoxOfficeStackView.addArrangedSubview(rankLabel)
+        dailyBoxOfficeStackView.addArrangedSubview(titleLabel)
+        dailyBoxOfficeStackView.addArrangedSubview(rankChangeValueLabel)
         dailyBoxOfficeStackView.addArrangedSubview(visitorLabel)
         
         contentView.addSubview(dailyBoxOfficeStackView)
-//        self.layer.addSeparator(x: 0, y: 0, width: frame.width, height: 0.5)
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.black.cgColor
     }
     
     private func setUpAutolayout() {
         NSLayoutConstraint.activate([
-            dailyBoxOfficeStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            dailyBoxOfficeStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            dailyBoxOfficeStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            dailyBoxOfficeStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            dailyBoxOfficeStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            dailyBoxOfficeStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            dailyBoxOfficeStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            dailyBoxOfficeStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
         ])
     }
     

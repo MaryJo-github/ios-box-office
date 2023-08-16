@@ -13,6 +13,9 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
     let titleLabel: UILabel = {
         let label: UILabel = UILabel()
         label.font = .preferredFont(forTextStyle: .title2)
+        label.minimumScaleFactor = 0.1
+        label.adjustsFontSizeToFitWidth = true
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         
@@ -22,6 +25,9 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
     private let visitorLabel: UILabel = {
         let label: UILabel = UILabel()
         label.font = .preferredFont(forTextStyle: .title3)
+        label.minimumScaleFactor = 0.1
+        label.adjustsFontSizeToFitWidth = true
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -31,6 +37,7 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
         let label: UILabel = UILabel()
         label.font = .preferredFont(forTextStyle: .title1)
         label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -40,6 +47,7 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
         let label: UILabel = UILabel()
         label.font = .preferredFont(forTextStyle: .title3)
         label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -104,6 +112,8 @@ final class DailyBoxOfficeCollectionViewCell: UICollectionViewListCell {
         
         contentView.addSubview(dailyBoxOfficeStackView)
         self.layer.addSeparator(x: 0, y: 0, width: frame.width, height: 0.5)
+//        self.layer.addBorder([.top], color: .systemGray2, width: 0.5)
+
         self.accessories = [.disclosureIndicator()]
     }
     

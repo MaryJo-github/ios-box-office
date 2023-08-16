@@ -102,8 +102,8 @@ final class DailyBoxOfficeViewController: UIViewController {
             loadingView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
@@ -223,22 +223,22 @@ extension DailyBoxOfficeViewController: UICollectionViewDataSource, UICollection
             
             return CGSize(width: width, height: height)
         } else {
-            let width: CGFloat = collectionView.frame.width / 2.2
-            var height = width
+            let width: CGFloat = collectionView.frame.width / 2.1
+            let height = width
             
-            guard let data = boxOfficeData,
-                  let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
-                return CGSize(width: width, height: height)
-            }
-            
-            let cell = DailyBoxOfficeCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: height))
-            
-            cell.titleLabel.text = data.movieName
-            cell.layoutIfNeeded()
-            
-            let titleLabelSize = cell.titleLabel.intrinsicContentSize
-            
-            height += titleLabelSize.height
+//            guard let data = boxOfficeData,
+//                  let data = data.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else {
+//                return CGSize(width: width, height: height)
+//            }
+//            
+//            let cell = DailyBoxOfficeCollectionViewCellGrid(frame: CGRect(x: 0, y: 0, width: width, height: height))
+//            
+//            cell.titleLabel.text = data.movieName
+//            cell.layoutIfNeeded()
+//            
+//            let titleLabelSize = cell.titleLabel.intrinsicContentSize
+//            
+//            height += titleLabelSize.height
             
             return CGSize(width: width, height: height)
         }

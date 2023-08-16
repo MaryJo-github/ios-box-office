@@ -18,86 +18,96 @@ final class MovieInformationScrollView: UIScrollView {
     
     private let directorTitleLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "감독"
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
     private let productionYearTitleLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "제작년도"
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
     private let openDateTitleLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "개봉일"
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
     private let showTimeTitleLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "상영시간"
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
     private let watchGradeNameTitleLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "관람등급"
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
     private let nationTitleLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "제작국가"
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
     private let genreTitleLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "장르"
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
     private let actorTitleLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "배우"
         label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
     private let directorLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -105,6 +115,8 @@ final class MovieInformationScrollView: UIScrollView {
     
     private let productionYearLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -112,6 +124,8 @@ final class MovieInformationScrollView: UIScrollView {
     
     private let openDateLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -119,6 +133,8 @@ final class MovieInformationScrollView: UIScrollView {
     
     private let showTimeLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -126,6 +142,8 @@ final class MovieInformationScrollView: UIScrollView {
     
     private let watchGradeNameLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -133,6 +151,8 @@ final class MovieInformationScrollView: UIScrollView {
     
     private let nationLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -140,6 +160,8 @@ final class MovieInformationScrollView: UIScrollView {
     
     private let genreLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -147,6 +169,8 @@ final class MovieInformationScrollView: UIScrollView {
     
     private let actorLabel: UILabel = {
         let label: UILabel = UILabel()
+        label.font = .preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         
@@ -320,5 +344,11 @@ final class MovieInformationScrollView: UIScrollView {
     
     func updateImage(image: UIImage) {
         imageView.image = image
+    }
+}
+
+extension UIFont {
+    func with(weight: UIFont.Weight) -> UIFont {
+        return UIFont.systemFont(ofSize: pointSize, weight: weight)
     }
 }

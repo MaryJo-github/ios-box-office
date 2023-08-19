@@ -33,43 +33,45 @@ final class DailyBoxOfficeViewController: UIViewController {
     var dataSource: UICollectionViewDiffableDataSource<Section, BoxOfficeEntity>!
     
     func configureDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<DailyBoxOfficeCollectionViewCell, BoxOfficeEntity> { (cell, indexPath, boxOffice) in
-//            print("indexPath \(indexPath.item)")
-//            guard let data = boxOffice.boxOfficeResult.dailyBoxOfficeList[index: indexPath.item] else { return }
-//            cell.configureCell(data: data)
-        }
-                
         dataSource = UICollectionViewDiffableDataSource<Section, BoxOfficeEntity>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, identifier: BoxOfficeEntity) -> UICollectionViewCell? in
-            print("indexPath \(indexPath.item)")
-            let cell = collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: identifier)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyBoxOfficeCollectionViewCell.identifier, for: indexPath) as? DailyBoxOfficeCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
             cell.configureCell(data: identifier)
+            
             return cell
         }
-                
     }
     
     func performQuery() {
         guard let boxOffice = boxOfficeData else { return }
         
-        let data = boxOffice.boxOfficeResult.dailyBoxOfficeList.map { BoxOfficeEntity(dailyBoxOffice: DailyBoxOffice(rowNumber: $0.rowNumber,
-                                                                                                                     rank: $0.rank,
-                                                                                                                     rankChangeValue: $0.rankChangeValue,
-                                                                                                                     rankOldAndNew: $0.rankOldAndNew,
-                                                                                                                     movieCode: $0.movieCode,
-                                                                                                                     movieName: $0.movieName,
-                                                                                                                     openDate: $0.openDate,
-                                                                                                                     salesAmount: $0.salesAmount,
-                                                                                                                     salesShare: $0.salesShare,
-                                                                                                                     salesChangeValue: $0.salesChangeValue,
-                                                                                                                     salesChangeRatio: $0.salesChangeRatio,
-                                                                                                                     salesAccumulate: $0.salesAccumulate,
-                                                                                                                     audienceCount: $0.audienceCount,
-                                                                                                                     audienceChangeValue: $0.audienceChangeValue,
-                                                                                                                     audienceChangeRatio: $0.audienceChangeRatio,
-                                                                                                                     audienceAccumulate: $0.audienceAccumulate,
-                                                                                                                     screenCount: $0.screenCount,
-                                                                                                                     showCount: $0.showCount)) }
+        let data = boxOffice.boxOfficeResult.dailyBoxOfficeList.map {
+            BoxOfficeEntity(
+                dailyBoxOffice: DailyBoxOffice(
+                    rowNumber: $0.rowNumber,
+                    rank: $0.rank,
+                    rankChangeValue: $0.rankChangeValue,
+                    rankOldAndNew: $0.rankOldAndNew,
+                    movieCode: $0.movieCode,
+                    movieName: $0.movieName,
+                    openDate: $0.openDate,
+                    salesAmount: $0.salesAmount,
+                    salesShare: $0.salesShare,
+                    salesChangeValue: $0.salesChangeValue,
+                    salesChangeRatio: $0.salesChangeRatio,
+                    salesAccumulate: $0.salesAccumulate,
+                    audienceCount: $0.audienceCount,
+                    audienceChangeValue: $0.audienceChangeValue,
+                    audienceChangeRatio: $0.audienceChangeRatio,
+                    audienceAccumulate: $0.audienceAccumulate,
+                    screenCount: $0.screenCount,
+                    showCount: $0.showCount
+                )
+            )
+        }
     
         var snapshot = NSDiffableDataSourceSnapshot<Section, BoxOfficeEntity>()
         snapshot.appendSections([.main])

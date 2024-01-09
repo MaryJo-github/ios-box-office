@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NetworkError {
+enum NetworkError: Equatable {
     case requestFail
     case responseFail
     case statusCodeNotSuccess(Int)

@@ -10,7 +10,7 @@ import UIKit
 final class MovieInformationViewController: UIViewController {
     private var kobisOpenAPI: KobisOpenAPI = KobisOpenAPI()
     private var kakaoAPI: KakaoAPI = KakaoAPI()
-    private var networkService: NetworkService = NetworkService()
+    private var networkService: NetworkManager = NetworkManager()
     private var dailyBoxOfficeData: DailyBoxOffice
     private var detailInformationData: DetailInformation?
     private var imageSearch: ImageSearch?

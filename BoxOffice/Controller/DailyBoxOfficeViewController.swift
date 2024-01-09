@@ -9,7 +9,7 @@ import UIKit
 
 final class DailyBoxOfficeViewController: UIViewController {
     private var kobisOpenAPI: KobisOpenAPI = KobisOpenAPI()
-    private var networkService: NetworkService = NetworkService()
+    private var networkService: NetworkManager = NetworkManager()
     private var boxOfficeData: BoxOffice?
     private let loadingView: LoadingView = LoadingView()
     private var targetDate: Date = Date.yesterday

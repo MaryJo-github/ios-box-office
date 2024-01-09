@@ -1,5 +1,5 @@
 //
-//  NetworkService.swift
+//  NetworkManager.swift
 //  BoxOffice
 //
 //  Created by Idinaloq, MARY on 2023/07/27.
@@ -7,17 +7,17 @@
 
 import Foundation
 
-final class NetworkService {
+final class NetworkManager {
     typealias NetworkResult = (Result<Data, NetworkError>) -> Void
     
-    private let session: URLSessionProtocol
+    private(set) var requester: Requestable
     
-    init(session: URLSessionProtocol = URLSession.shared) {
-        self.session = session
+    init(requester: Requestable = DefaultRequester()) {
+        self.requester = requester
     }
 
     func fetchData(urlRequest: URLRequest, completion: @escaping NetworkResult) {
-        let task: URLSessionDataTask  = session.dataTask(with: urlRequest) { data, response, error in
+        let task: URLSessionDataTask = requester.dataTask(with: urlRequest) { data, response, error in
             if let _ = error {
                 completion(.failure(.requestFail))
                 return
@@ -42,5 +42,11 @@ final class NetworkService {
         }
         
         task.resume()
+    }
+}
+
+final class DefaultRequester: Requestable {
+    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        return URLSession.shared.dataTask(with: urlRequest, completionHandler: completionHandler)
     }
 }

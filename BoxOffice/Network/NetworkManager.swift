@@ -7,9 +7,7 @@
 
 import Foundation
 
-final class NetworkManager {
-    typealias NetworkResult = (Result<Data, NetworkError>) -> Void
-    
+final class NetworkManager: NetworkManageable {    
     private(set) var requester: Requestable
     
     init(requester: Requestable = DefaultRequester()) {

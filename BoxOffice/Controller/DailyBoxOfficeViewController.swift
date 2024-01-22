@@ -8,7 +8,6 @@
 import UIKit
 
 final class DailyBoxOfficeViewController: UIViewController {
-    private var kobisOpenAPI: KobisOpenAPI = KobisOpenAPI()
     private var networkService: NetworkManager = NetworkManager()
     private var boxOfficeData: BoxOffice?
     private let loadingView: LoadingView = LoadingView()
@@ -142,7 +141,11 @@ final class DailyBoxOfficeViewController: UIViewController {
     }
     
     private func receiveData() {
-        guard let urlRequest = receiveURLRequest() else { return }
+        guard let urlRequest = MovieInformationManager
+            .shared
+            .receiveDailyURLRequest(date: targetDate) else {
+            return
+        }
         
         networkService.fetchData(urlRequest: urlRequest) { result in
             switch result {
@@ -152,20 +155,6 @@ final class DailyBoxOfficeViewController: UIViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        }
-    }
-    
-    private func receiveURLRequest() -> URLRequest? {
-        let targetDateString = targetDate.convertString(format: "yyyyMMdd")
-        
-        do {
-            let urlRequest = try kobisOpenAPI.receiveURLRequest(serviceType: .dailyBoxOffice, queryItems: ["targetDt": targetDateString])
-            
-            return urlRequest
-        } catch {
-            print(error.localizedDescription)
-            
-            return nil
         }
     }
     

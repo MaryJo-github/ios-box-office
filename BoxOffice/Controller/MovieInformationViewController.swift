@@ -8,8 +8,6 @@
 import UIKit
 
 final class MovieInformationViewController: UIViewController {
-    private var kobisOpenAPI: KobisOpenAPI = KobisOpenAPI()
-    private var kakaoAPI: KakaoAPI = KakaoAPI()
     private var networkService: NetworkManager = NetworkManager()
     private var dailyBoxOfficeData: DailyBoxOffice
     private var detailInformationData: DetailInformation?
@@ -76,7 +74,11 @@ final class MovieInformationViewController: UIViewController {
     }
     
     private func receiveBoxOfficeData() {
-        guard let urlRequest = receiveBoxOfficeURLRequest() else { return }
+        guard let urlRequest = MovieInformationManager
+            .shared
+            .receiveDetailURLRequest(movieCode: dailyBoxOfficeData.movieCode) else {
+                return
+            }
         
         networkService.fetchData(urlRequest: urlRequest) { result in
             switch result {
@@ -89,19 +91,7 @@ final class MovieInformationViewController: UIViewController {
             }
         }
     }
-    
-    private func receiveBoxOfficeURLRequest() -> URLRequest? {
-        do {
-            let urlRequest = try kobisOpenAPI.receiveURLRequest(serviceType: .movieInformation, queryItems: ["movieCd": dailyBoxOfficeData.movieCode])
-            
-            return urlRequest
-        } catch {
-            print(error.localizedDescription)
-            
-            return nil
-        }
-    }
-    
+
     private func decodeBoxOfficeData(_ data: Data) {
         do {
             let decodedData = try JSONDecoder().decode(DetailInformation.self, from: data)
@@ -118,7 +108,12 @@ final class MovieInformationViewController: UIViewController {
     }
     
     private func receiveImageData() {
-        guard let urlRequest = receiveImageURLRequest() else { return }
+        let query = "\(dailyBoxOfficeData.movieName) 영화 포스터"
+        guard let urlRequest = ImageEndPoint(
+            serviceType: .search(query: query)
+        ).urlRequest else {
+            return
+        }
         
         networkService.fetchData(urlRequest: urlRequest) { result in
             switch result {
@@ -129,18 +124,6 @@ final class MovieInformationViewController: UIViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        }
-    }
-    
-    private func receiveImageURLRequest() -> URLRequest? {
-        do {
-            let urlRequest = try kakaoAPI.receiveURLRequest(queryItems: ["query": "\(dailyBoxOfficeData.movieName) 영화 포스터", "size": "1"])
-            
-            return urlRequest
-        } catch {
-            print(error.localizedDescription)
-            
-            return nil
         }
     }
     

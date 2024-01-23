@@ -8,7 +8,6 @@
 import UIKit
 
 final class MovieInformationViewController: UIViewController {
-    private var networkService: NetworkManager = NetworkManager()
     private var dailyBoxOfficeData: DailyBoxOffice
     private var detailInformationData: DetailInformation?
     private var imageSearch: ImageSearch?
@@ -80,24 +79,15 @@ final class MovieInformationViewController: UIViewController {
                 return
             }
         
-        networkService.fetchData(urlRequest: urlRequest) { result in
+        MovieInformationManager.shared.receiveDetailData(urlRequest: urlRequest) { result in
             switch result {
             case .success(let data):
-                self.decodeBoxOfficeData(data)
+                self.detailInformationData = data
                 self.updateScrollView()
                 self.completionCount += 1
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        }
-    }
-
-    private func decodeBoxOfficeData(_ data: Data) {
-        do {
-            let decodedData = try JSONDecoder().decode(DetailInformation.self, from: data)
-            detailInformationData = decodedData
-        } catch {
-            print(error.localizedDescription)
         }
     }
     
@@ -115,24 +105,15 @@ final class MovieInformationViewController: UIViewController {
             return
         }
         
-        networkService.fetchData(urlRequest: urlRequest) { result in
+        ImageManager.shared.receiveSearchData(urlRequest: urlRequest) { result in
             switch result {
             case .success(let data):
-                self.decodeImageData(data)
+                self.imageSearch = data
                 self.updateImageView()
                 self.completionCount += 1
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        }
-    }
-    
-    private func decodeImageData(_ data: Data) {
-        do {
-            let decodedData = try JSONDecoder().decode(ImageSearch.self, from: data)
-            imageSearch = decodedData
-        } catch {
-            print(error.localizedDescription)
         }
     }
     

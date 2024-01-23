@@ -147,23 +147,14 @@ final class DailyBoxOfficeViewController: UIViewController {
             return
         }
         
-        networkService.fetchData(urlRequest: urlRequest) { result in
+        MovieInformationManager.shared.receiveDailyData(urlRequest: urlRequest) { result in
             switch result {
             case .success(let data):
-                self.decodeData(data)
+                self.boxOfficeData = data
                 self.reloadCollectionView()
             case .failure(let error):
                 print(error.localizedDescription)
             }
-        }
-    }
-    
-    private func decodeData(_ data: Data) {
-        do {
-            let decodedData = try JSONDecoder().decode(BoxOffice.self, from: data)
-            boxOfficeData = decodedData
-        } catch {
-            print(error.localizedDescription)
         }
     }
     

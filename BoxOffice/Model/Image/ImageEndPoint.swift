@@ -19,12 +19,15 @@ struct ImageEndPoint {
         components.path = serviceType.path
         components.queryItems = serviceType.queryItems
         
-        guard let url = components.url else { return nil }
+        guard let url = components.url,
+              let apiKey = Bundle.main.infoDictionary?["KakaoAPIKey"] as? String else {
+            return nil
+        }
         
         var urlRequest: URLRequest = URLRequest(url: url)
 
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue(APIKey.value, forHTTPHeaderField: APIKey.key)
+        urlRequest.addValue(apiKey, forHTTPHeaderField: "Authorization")
     
         return urlRequest
     }
@@ -49,10 +52,5 @@ struct ImageEndPoint {
                 return [URLQueryItem(name: "query", value: query), URLQueryItem(name: "size", value: "1")]
             }
         }
-    }
-    
-    private enum APIKey {
-        static let key: String = "Authorization"
-        static let value: String = "KakaoAK 5a5bed59f416826d3b667c6d97eac62a"
     }
 }

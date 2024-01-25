@@ -14,16 +14,20 @@ struct MovieInformationEndPoint {
     
     var urlRequest: URLRequest? {
         var components: URLComponents = URLComponents()
-        let apiQuery: URLQueryItem = URLQueryItem(name: APIKey.key, value: APIKey.value)
         
         components.scheme = scheme
         components.host = host
         components.path = serviceType.path
         components.queryItems = serviceType.queryItems
+        
+        guard let apiKey = Bundle.main.infoDictionary?["KobisAPIKey"] as? String else {
+            return nil
+        }
+        
+        let apiQuery: URLQueryItem = URLQueryItem(name: "key", value: apiKey)
         components.queryItems?.append(apiQuery)
         
         guard let url = components.url else { return nil }
-        
         return URLRequest(url: url)
     }
     
@@ -52,11 +56,5 @@ struct MovieInformationEndPoint {
                 return [URLQueryItem(name: key, value: value)]
             }
         }
-        
-    }
-
-    private enum APIKey {
-        static let key: String = "key"
-        static let value: String = "c824c74a1ff9ed62089a9a0bcc0d3211"
     }
 }

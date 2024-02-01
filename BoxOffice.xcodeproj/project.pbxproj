@@ -14,7 +14,7 @@
 		4423AB2C2A8A1D7900A68C1A /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4423AB2B2A8A1D7900A68C1A /* CalendarViewController.swift */; };
 		4423AB682A8CB26700A68C1A /* DailyBoxOfficeCollectionViewGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4423AB672A8CB26700A68C1A /* DailyBoxOfficeCollectionViewGridCell.swift */; };
 		4451AFA22B4D261300CA4B34 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4451AFA12B4D261300CA4B34 /* Requestable.swift */; };
-		4451AFA42B4D27E900CA4B34 /* Requesters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4451AFA32B4D27E900CA4B34 /* Requesters.swift */; };
+		4451AFA42B4D27E900CA4B34 /* StubRequesters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4451AFA32B4D27E900CA4B34 /* StubRequesters.swift */; };
 		4451AFA62B4D68B500CA4B34 /* NetworkError+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4451AFA52B4D68B500CA4B34 /* NetworkError+.swift */; };
 		4451AFAC2B4D76E800CA4B34 /* MovieInformationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4451AFAB2B4D76E800CA4B34 /* MovieInformationManager.swift */; };
 		4451AFAE2B4D787000CA4B34 /* NetworkManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4451AFAD2B4D787000CA4B34 /* NetworkManageable.swift */; };
@@ -73,7 +73,7 @@
 		4423AB2B2A8A1D7900A68C1A /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		4423AB672A8CB26700A68C1A /* DailyBoxOfficeCollectionViewGridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyBoxOfficeCollectionViewGridCell.swift; sourceTree = "<group>"; };
 		4451AFA12B4D261300CA4B34 /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
-		4451AFA32B4D27E900CA4B34 /* Requesters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requesters.swift; sourceTree = "<group>"; };
+		4451AFA32B4D27E900CA4B34 /* StubRequesters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubRequesters.swift; sourceTree = "<group>"; };
 		4451AFA52B4D68B500CA4B34 /* NetworkError+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkError+.swift"; sourceTree = "<group>"; };
 		4451AFAB2B4D76E800CA4B34 /* MovieInformationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieInformationManager.swift; sourceTree = "<group>"; };
 		4451AFAD2B4D787000CA4B34 /* NetworkManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManageable.swift; sourceTree = "<group>"; };
@@ -184,9 +184,18 @@
 			path = MovieInformation;
 			sourceTree = "<group>";
 		};
+		4451B00E2B69277800CA4B34 /* Stub */ = {
+			isa = PBXGroup;
+			children = (
+				4451AFA32B4D27E900CA4B34 /* StubRequesters.swift */,
+			);
+			path = Stub;
+			sourceTree = "<group>";
+		};
 		4470A0D42B29A02E00114E76 /* TestDouble */ = {
 			isa = PBXGroup;
 			children = (
+				4451B00E2B69277800CA4B34 /* Stub */,
 				4470A0D52B29A03900114E76 /* Dummy */,
 				4470A0D62B29A04100114E76 /* Mock */,
 			);
@@ -222,6 +231,7 @@
 		44CBACA82A6E7CC100FDBAAE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				DCF421BD2A80ECA20043174F /* Network */,
 				4451AFD82B5E4C9000CA4B34 /* Image */,
 				4451AFDB2B5E4CBD00CA4B34 /* MovieInformation */,
 				4416820B2A70F2C200720ACF /* DataTransferObject */,
@@ -284,7 +294,6 @@
 				44CBACA82A6E7CC100FDBAAE /* Model */,
 				44CBACA92A6E7CCB00FDBAAE /* View */,
 				44CBACAA2A6E7CCF00FDBAAE /* Controller */,
-				DCF421BD2A80ECA20043174F /* Network */,
 				DC1CB1ED2A8F3F6000235BC1 /* Enum */,
 				DCF421B92A80E81A0043174F /* Extension */,
 				DCF421BE2A80EE360043174F /* Protocol */,
@@ -312,7 +321,6 @@
 				4451AFA72B4D6CA500CA4B34 /* Image */,
 				4451AFA82B4D6CEF00CA4B34 /* MovieInformation */,
 				4470A0D72B29A72000114E76 /* Network */,
-				4451AFA32B4D27E900CA4B34 /* Requesters.swift */,
 			);
 			path = BoxOfficeTests;
 			sourceTree = "<group>";
@@ -380,7 +388,6 @@
 			isa = PBXGroup;
 			children = (
 				DCB6831E2A727B99005D1510 /* NetworkManager.swift */,
-				4451AFAD2B4D787000CA4B34 /* NetworkManageable.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -389,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				4451AFA12B4D261300CA4B34 /* Requestable.swift */,
+				4451AFAD2B4D787000CA4B34 /* NetworkManageable.swift */,
 				DC8498582A8A5CAD007AE7B8 /* CalendarDelegate.swift */,
 			);
 			path = Protocol;
@@ -541,7 +549,7 @@
 				4451AFA62B4D68B500CA4B34 /* NetworkError+.swift in Sources */,
 				4451AFE72B5E579D00CA4B34 /* DummyRequester.swift in Sources */,
 				4451AFE52B5E53DA00CA4B34 /* MockFailureNetworkManager.swift in Sources */,
-				4451AFA42B4D27E900CA4B34 /* Requesters.swift in Sources */,
+				4451AFA42B4D27E900CA4B34 /* StubRequesters.swift in Sources */,
 				4451AFE92B5E736400CA4B34 /* ImageSearch+.swift in Sources */,
 				4451AFE32B5E53C700CA4B34 /* MockSuccessNetworkManager.swift in Sources */,
 				4451AFE12B5E520C00CA4B34 /* MovieInformationManagerTests.swift in Sources */,

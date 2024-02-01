@@ -1,5 +1,5 @@
 //
-//  Requesters.swift
+//  StubRequesters.swift
 //  BoxOfficeTests
 //
 //  Created by MARY on 2024/01/09.
